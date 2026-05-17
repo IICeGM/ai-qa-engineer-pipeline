@@ -14,27 +14,33 @@
 
 ## โครงสร้างโปรเจกต์ (Project Structure)
 
-```text
-├── checkout.js                 # [เป้าหมาย] โค้ดฟังก์ชันระบบ E-commerce ตัวตั้งต้นที่ต้องการทดสอบ
-├── test_history_log.json       # ไฟล์จำลองประวัติการรันเทสย้อนหลัง (ใช้ใน Step 3)
+AiQA/
+├── .env                       
+├── checkout.js                 
 │
 ├── generate-test-plan.js       # Step 1: สคริปต์สั่ง AI วิเคราะห์โค้ดและสร้างแผนทดสอบ
 ├── test_cases.json             # [Output Step 1] แผนการทดสอบในรูปแบบ Structured JSON
 │
-├── intelligent-runner.js       # Step 2: สคริปต์ Test Runner รันเทสจริงกับโค้ดเป้าหมาย
-├── error_trace.json            # [Output Step 2] บันทึกหลักฐาน Error กรณีมีเทสไม่ผ่าน
+├── intelligent-runner.js       # Step 2: สคริปต์ Test Runner รันเทสจริง
+├── error_trace.json            # [Output Step 2] บันทึกหลักฐาน Error (จาก intelligent-runner)
 │
-├── ai-defect-detector.js       # Step 3: สคริปต์ AI แยกแยะ Flaky Test และ Defect Hotspot
-├── ai_defect_report.json       # [Output Step 3] รายงานสรุปสถานะความเสถียรของระบบ
+├── Defect_Detection/           # [แก้] ถูกจัดเก็บในโฟลเดอร์แยกต่างหาก
+│   ├── defect-detctor.js       # Step 3: สคริปต์หา Flaky Test (หมายเหตุ: ไฟล์จริงพิมพ์ชื่อ detctor)
+│   ├── test_history_log.json   # ไฟล์จำลองประวัติการรันย้อนหลัง 
+│   └── ai_defect_report.json   # [Output Step 3] รายงานสรุปสถานะความเสถียร
 │
-├── ai-root-cause-analyzer.js   # Step 4: สคริปต์ AI ชี้เป้าบรรทัดที่บั๊กและเสนอทางแก้
-├── ai_suggested_fix.json       # [Output Step 4] แพตช์โค้ดคำแนะนำการซ่อมแซมจาก AI
+├── ai-root-cause-analyzer.js   # Step 4: สคริปต์ AI ชี้เป้าบรรทัดที่บั๊ก
+├── ai_suggested_fix.json       # [Output Step 4] แพตช์โค้ดคำแนะนำการซ่อมแซม
 │
 ├── continuous-feedback.js      # Step 5: สคริปต์ AI สรุปภาพรวมและประเมิน Health Score
-└── continuous_feedback_report.json # [Output Step 5] แผนกลยุทธ์การยกระดับคุณภาพซอฟต์แวร์
+└── feedback_report/           
+    └── continuous_feedback_report.json # [Output Step 5] แผนกลยุทธ์ยกระดับคุณภาพ
+
 เจาะลึก 5 ขั้นตอนการทำงาน (The 5-Step Pipeline)ขั้นตอนชื่อสคริปต์หน้าที่หลักสิ่งที่ได้ออกมา (Output)Step 1generate-test-plan.jsอ่านโค้ด checkout.js แล้วใช้ AI เจนเคสทดสอบตามเงื่อนไขtest_cases.jsonStep 2intelligent-runner.jsนำเคสทดสอบมารันจริง หากผลลัพธ์ไม่ตรงกับที่คิดจะคาย Error Logerror_trace.jsonStep 3ai-defect-detector.jsอ่านประวัติการรันย้อนหลังเพื่อหาจุดเสี่ยงและแยกเทสไม่เสถียรออกai_defect_report.jsonStep 4ai-root-cause-analyzer.jsนำโค้ดจริงกับ Error Log มาเทียบกันเพื่อหาบรรทัดที่พังและเขียนโค้ดแก้ai_suggested_fix.jsonStep 5continuous-feedback.jsรวบรวม Big Data ทั้งหมดมาให้คะแนนระบบและแนะวิธีเขียนโค้ดให้ดีขึ้นcontinuous_feedback_report.jsonวิธีการติดตั้งและตั้งค่า (Installation & Setup)ดาวน์โหลดโปรเจกต์ และเปิด Terminal ในโฟลเดอร์หลักติดตั้ง Dependencies ที่จำเป็น (รองรับ Node.js เวอร์ชันล่าสุด)Bashnpm install @google/genai
 ตั้งค่า API Key เปิดไฟล์สคริปต์ที่มีการใช้งาน AI (generate-test-plan.js, ai-defect-detector.js, ai-root-cause-analyzer.js, continuous-feedback.js) แล้วทำการระบุ Gemini API Key ของคุณในตัวแปร:JavaScriptconst apiKey = "ใส่_API_KEY_ของคุณที่นี่";
-(หมายเหตุ: หากต้องการรันเพื่อดู Flow ข้อมูลก่อน สามารถใช้โหมด Simulated หรือแบบ Mock ข้อมูลได้โดยไม่จำเป็นต้องใส่ API Key)วิธีการสั่งรันระบบ (How to Run)รันเรียงลำดับตามขั้นตอนทีละสเตป เพื่อให้เกิดการส่งต่อข้อมูลอย่างสมบูรณ์:Bash# 1. สร้างแผนการทดสอบด้วย AI
+(หมายเหตุ: หากต้องการรันเพื่อดู Flow ข้อมูลก่อน สามารถใช้โหมด Simulated หรือแบบ Mock ข้อมูลได้โดยไม่จำเป็นต้องใส่ API Key)วิธีการสั่งรันระบบ (How to Run)รันเรียงลำดับตามขั้นตอนทีละสเตป เพื่อให้เกิดการส่งต่อข้อมูลอย่างสมบูรณ์:Bash
+
+# 1. สร้างแผนการทดสอบด้วย AI
 node generate-test-plan.js
 
 # 2. รันการทดสอบจริงกับซอร์สโค้ดเพื่อหาข้อผิดพลาด
