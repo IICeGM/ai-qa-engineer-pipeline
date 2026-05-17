@@ -1,0 +1,80 @@
+[
+  {
+    "test_id": "TC_001",
+    "scenario": "คำนวณราคาปกติโดยไม่มีส่วนลด",
+    "test_type": "Positive",
+    "inputs": {
+      "price": 100,
+      "discoutCode": ""
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 100
+    }
+  },
+  {
+    "test_id": "TC_002",
+    "scenario": "ใช้โค้ดส่วนลดแบบลดเป็นจำนวนเงินตายตัว WELCOME20",
+    "test_type": "Positive",
+    "inputs": {
+      "price": 100,
+      "discountCode": "WELCOME20"
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 80
+    }
+  },
+  {
+    "test_id": "TC_003",
+    "scenario": "ใช้โค้ดส่วนลดแบบคิดเป็นเปอร์เซ็นต์ HALFPRICE",
+    "test_type": "Positive",
+    "inputs": {
+      "price": 200,
+      "discountCode": "HALFPRICE"
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 100
+    }
+  },
+  {
+    "test_id": "TC_004",
+    "scenario": "ส่งค่าราคาติดลบเข้าสู ่ระบบเพื ่อเช็ค Validation",
+    "test_type": "Negative",
+    "inputs": {
+      "price": -50,
+      "discountCode": ""
+    },
+    "expected": {
+      "isError": true,
+      "outputValue": "Invalid price: ราคาต้องเป็นตัวเลขและห้ามติดลบ"
+    }
+  },
+  {
+    "test_id": "TC_005",
+    "scenario": "ส่งโค้ดส่วนลดที่ไม่มีในระบบการทางาน",
+    "test_type": "Negative",
+    "inputs": {
+      "price": 100,
+      "discountCode": "INVALID_CODE"
+    },
+    "expected": {
+      "isError": true,
+      "outputValue": "Invalid discount code: โค้ดส่วนลดไม่ถูกต้อง"
+    }
+  },
+  {
+    "test_id": "TC_006",
+    "scenario": "กรณีราคาสินค้าน้อยกว่ามูลค่าส่วนลดรวม (Edge Case)",
+    "test_type": "Edge_Case",
+    "inputs": {
+      "price": 15,
+      "discountCode": "WELCOME20"
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 0
+    }
+  }
+]

@@ -1,0 +1,210 @@
+[
+  {
+    "test_id": "TC_001",
+    "scenario": "ราคาปกติ ไม่มีรหัสส่วนลด (discountCode เป็น undefined)",
+    "test_type": "Positive",
+    "inputs": {
+      "price": 100,
+      "discountCode": null
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 100
+    }
+  },
+  {
+    "test_id": "TC_002",
+    "scenario": "ราคาปกติ ไม่มีรหัสส่วนลด (discountCode เป็น null)",
+    "test_type": "Positive",
+    "inputs": {
+      "price": 100,
+      "discountCode": null
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 100
+    }
+  },
+  {
+    "test_id": "TC_003",
+    "scenario": "ราคาปกติ ไม่มีรหัสส่วนลด (discountCode เป็น string ว่าง)",
+    "test_type": "Positive",
+    "inputs": {
+      "price": 100,
+      "discountCode": ""
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 100
+    }
+  },
+  {
+    "test_id": "TC_004",
+    "scenario": "ราคาปกติ มีรหัสส่วนลด WELCOME20",
+    "test_type": "Positive",
+    "inputs": {
+      "price": 100,
+      "discountCode": "WELCOME20"
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 80
+    }
+  },
+  {
+    "test_id": "TC_005",
+    "scenario": "ราคาปกติ มีรหัสส่วนลด HALFPRICE",
+    "test_type": "Positive",
+    "inputs": {
+      "price": 100,
+      "discountCode": "HALFPRICE"
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 50
+    }
+  },
+  {
+    "test_id": "TC_006",
+    "scenario": "ราคาต่ำกว่าส่วนลด WELCOME20 ทำให้ราคาสุดท้ายเป็น 0",
+    "test_type": "Edge_Case",
+    "inputs": {
+      "price": 15,
+      "discountCode": "WELCOME20"
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 0
+    }
+  },
+  {
+    "test_id": "TC_007",
+    "scenario": "ราคาเป็น 0 ไม่มีรหัสส่วนลด",
+    "test_type": "Edge_Case",
+    "inputs": {
+      "price": 0,
+      "discountCode": null
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 0
+    }
+  },
+  {
+    "test_id": "TC_008",
+    "scenario": "ราคาเป็น 0 มีรหัสส่วนลด WELCOME20",
+    "test_type": "Edge_Case",
+    "inputs": {
+      "price": 0,
+      "discountCode": "WELCOME20"
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 0
+    }
+  },
+  {
+    "test_id": "TC_009",
+    "scenario": "ราคาเป็น 0 มีรหัสส่วนลด HALFPRICE",
+    "test_type": "Edge_Case",
+    "inputs": {
+      "price": 0,
+      "discountCode": "HALFPRICE"
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 0
+    }
+  },
+  {
+    "test_id": "TC_010",
+    "scenario": "ราคาเป็นค่าที่ไม่ใช่ตัวเลข (string)",
+    "test_type": "Negative",
+    "inputs": {
+      "price": "abc",
+      "discountCode": null
+    },
+    "expected": {
+      "isError": true,
+      "outputValue": "Invalid price"
+    }
+  },
+  {
+    "test_id": "TC_011",
+    "scenario": "ราคาเป็นค่าที่ไม่ใช่ตัวเลข (boolean)",
+    "test_type": "Negative",
+    "inputs": {
+      "price": true,
+      "discountCode": null
+    },
+    "expected": {
+      "isError": true,
+      "outputValue": "Invalid price"
+    }
+  },
+  {
+    "test_id": "TC_012",
+    "scenario": "ราคาเป็นค่าติดลบ",
+    "test_type": "Negative",
+    "inputs": {
+      "price": -50,
+      "discountCode": null
+    },
+    "expected": {
+      "isError": true,
+      "outputValue": "Invalid price"
+    }
+  },
+  {
+    "test_id": "TC_013",
+    "scenario": "รหัสส่วนลดไม่ถูกต้อง (string ที่ไม่รู้จัก)",
+    "test_type": "Negative",
+    "inputs": {
+      "price": 100,
+      "discountCode": "UNKNOWNCODE"
+    },
+    "expected": {
+      "isError": true,
+      "outputValue": "Invalid discount code"
+    }
+  },
+  {
+    "test_id": "TC_014",
+    "scenario": "ราคาเป็นเลขทศนิยม มีรหัสส่วนลด WELCOME20",
+    "test_type": "Positive",
+    "inputs": {
+      "price": 25.5,
+      "discountCode": "WELCOME20"
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 5.5
+    }
+  },
+  {
+    "test_id": "TC_015",
+    "scenario": "ราคาเป็นเลขทศนิยม มีรหัสส่วนลด HALFPRICE",
+    "test_type": "Positive",
+    "inputs": {
+      "price": 25.5,
+      "discountCode": "HALFPRICE"
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 12.75
+    }
+  },
+  {
+    "test_id": "TC_016",
+    "scenario": "ราคาเป็นเลขจำนวนมาก มีรหัสส่วนลด WELCOME20",
+    "test_type": "Positive",
+    "inputs": {
+      "price": 1000000,
+      "discountCode": "WELCOME20"
+    },
+    "expected": {
+      "isError": false,
+      "outputValue": 999980
+    }
+  }
+]

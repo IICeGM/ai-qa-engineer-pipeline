@@ -1,0 +1,24 @@
+[
+  {
+    "test_id": "TC_004",
+    "expected": {
+      "isError": true,
+      "outputValue": "Invalid price: ราคาต้องเป็นตัวเลขและห้ามติดลบ"
+    },
+    "actual": {
+      "isError": true,
+      "value": "Invalid price"
+    }
+  },
+  {
+    "test_id": "TC_005",
+    "expected": {
+      "isError": true,
+      "outputValue": "Invalid discount code: โค้ดส่วนลดไม่ถูกต้อง"
+    },
+    "actual": {
+      "isError": true,
+      "value": "Invalid discount code"
+    }
+  }
+]

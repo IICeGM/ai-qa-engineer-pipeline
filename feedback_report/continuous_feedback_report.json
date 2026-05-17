@@ -1,0 +1,87 @@
+{
+  "system_health_score": 75,
+  "test_matrices_optimization": {
+    "redundant_tests": [
+      "TC_002: มี Input (price: 100, discountCode: null) ที่ซ้ำซ้อนกับ TC_001 อย่างสมบูรณ์ ควรลบออกเพื่อลดความซ้ำซ้อนในการทดสอบ"
+    ],
+    "missing_coverage": [
+      {
+        "test_id": "TC_NEW_001",
+        "scenario": "รหัสส่วนลดไม่ถูกต้อง (case-sensitive, เช่น 'welcome20' แทน 'WELCOME20')",
+        "test_type": "Negative",
+        "inputs": {
+          "price": 100,
+          "discountCode": "welcome20"
+        },
+        "expected": {
+          "isError": true,
+          "outputValue": "Invalid discount code"
+        }
+      },
+      {
+        "test_id": "TC_NEW_002",
+        "scenario": "รหัสส่วนลดมีช่องว่างนำหน้า/ต่อท้าย (เช่น ' WELCOME20 ')",
+        "test_type": "Edge_Case",
+        "inputs": {
+          "price": 100,
+          "discountCode": " WELCOME20 "
+        },
+        "expected": {
+          "isError": false,
+          "outputValue": 80
+        }
+      },
+      {
+        "test_id": "TC_NEW_003",
+        "scenario": "ราคาเป็นเลขทศนิยมที่ทำให้เกิดผลลัพธ์ทศนิยมยาวและต้องการการปัดเศษที่ชัดเจน (เช่น 25.01, HALFPRICE)",
+        "test_type": "Edge_Case",
+        "inputs": {
+          "price": 25.01,
+          "discountCode": "HALFPRICE"
+        },
+        "expected": {
+          "isError": false,
+          "outputValue": 12.51
+        }
+      },
+      {
+        "test_id": "TC_NEW_004",
+        "scenario": "ราคาเป็นค่าที่เกินขีดจำกัดสูงสุดของระบบ (เช่น Number.MAX_SAFE_INTEGER + 1)",
+        "test_type": "Negative",
+        "inputs": {
+          "price": 9007199254740992,
+          "discountCode": null
+        },
+        "expected": {
+          "isError": true,
+          "outputValue": "Invalid price"
+        }
+      },
+      {
+        "test_id": "TC_NEW_005",
+        "scenario": "รหัสส่วนลดเป็นค่าที่ไม่ใช่ string (เช่น number)",
+        "test_type": "Negative",
+        "inputs": {
+          "price": 100,
+          "discountCode": 12345
+        },
+        "expected": {
+          "isError": true,
+          "outputValue": "Invalid discount code"
+        }
+      }
+    ]
+  },
+  "code_quality_improvements": {
+    "architectural_advice": "1. ควรแยกส่วนการจัดการรหัสส่วนลดออกจากฟังก์ชันคำนวณราคาหลัก โดยสร้างเป็น Discount Service หรือ Pricing Engine เพื่อให้การเพิ่ม/แก้ไข/ลบรหัสส่วนลดทำได้ง่ายขึ้น และลดการแก้ไขโค้ดในส่วนที่เกี่ยวข้องกับการคำนวณราคาโดยตรง\n2. ควรมีการกำหนดและบังคับใช้กฎการปัดเศษทศนิยมสำหรับผลลัพธ์การคำนวณราคาอย่างชัดเจน เพื่อป้องกันความคลาดเคลื่อนและให้ผลลัพธ์ที่สอดคล้องกันทั่วทั้งระบบ\n3. ควรมีการกำหนดค่าส่วนลด (เช่น 20%, 50%) เป็น Configuration แทนการ Hardcode ในโค้ด เพื่อให้สามารถปรับเปลี่ยนได้ง่ายโดยไม่ต้อง Deploy ใหม่ และเพิ่มความยืดหยุ่นในการบริหารจัดการโปรโมชั่น",
+    "refactoring_suggestions": "1. ใช้หลัก Single Responsibility Principle (SRP) โดยแยกฟังก์ชันออกเป็นส่วนย่อยๆ เช่น `validatePrice(price)`, `getDiscountAmount(discountCode)`, `applyDiscount(price, discountAmount)` และ `calculateFinalPrice(price, discountCode)` เพื่อให้แต่ละฟังก์ชันมีหน้าที่เดียวและ Test ได้ง่ายขึ้น\n2. ใช้ Guard Clauses หรือ Early Exit สำหรับการตรวจสอบ Input เพื่อเพิ่มความอ่านง่ายของโค้ดและลดระดับการซ้อนกันของเงื่อนไข\n3. ใช้ Enum หรือ Constant สำหรับรหัสส่วนลดที่รู้จัก (เช่น `DISCOUNT_CODE.WELCOME20`) เพื่อป้องกันการพิมพ์ผิดและเพิ่มความสามารถในการบำรุงรักษา\n4. เพิ่มการตรวจสอบประเภทข้อมูล (Type Checking) ของ Input Parameters อย่างเข้มงวด เช่น ตรวจสอบว่า `price` เป็น Number และ `discountCode` เป็น String หรือ null/undefined"
+  },
+  "action_items_for_dev_team": [
+    "ดำเนินการแก้ไข Test Matrices โดยลบ Test Case ที่ซ้ำซ้อน (`TC_002`) และเพิ่ม Test Case ใหม่ตามข้อเสนอแนะในส่วน `missing_coverage`",
+    "ทบทวนและปรับปรุงโครงสร้างโค้ดตามคำแนะนำในส่วน `code_quality_improvements` โดยเน้นที่การแยกส่วน Discount Service และการจัดการ Input Validation เป็นอันดับแรก",
+    "กำหนดและบันทึกกฎการปัดเศษทศนิยมสำหรับผลลัพธ์การคำนวณราคาให้ชัดเจน และปรับปรุงโค้ดให้เป็นไปตามกฎนั้น",
+    "พิจารณาการย้ายค่าส่วนลดไปเก็บใน Configuration หรือ Database เพื่อให้สามารถบริหารจัดการได้ง่ายขึ้น",
+    "ดำเนินการทดสอบระบบทั้งหมดอีกครั้งด้วย Test Cases ที่ปรับปรุงแล้ว และบันทึกผลการทดสอบอย่างเป็นระบบ",
+    "จัดทำเอกสารข้อกำหนดสำหรับรหัสส่วนลด เช่น การรองรับ Case-sensitivity, การจัดการช่องว่าง, และประเภทข้อมูลที่ถูกต้อง"
+  ]
+}

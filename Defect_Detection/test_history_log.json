@@ -1,0 +1,42 @@
+[
+  {
+    "run_id": "BUILD_101",
+    "results": [
+      {"test_id": "TC_001", "status": "PASSED"},
+      {"test_id": "TC_005", "status": "PASSED"},
+      {"test_id": "TC_006", "status": "FAILED", "error": "Expected 0 but got -5"}
+    ]
+  },
+  {
+    "run_id": "BUILD_102",
+    "results": [
+      {"test_id": "TC_001", "status": "PASSED"},
+      {"test_id": "TC_005", "status": "FAILED", "error": "Timeout connecting to DB"},
+      {"test_id": "TC_006", "status": "FAILED", "error": "Expected 0 but got -5"}
+    ]
+  },
+  {
+    "run_id": "BUILD_103",
+    "results": [
+      {"test_id": "TC_001", "status": "PASSED"},
+      {"test_id": "TC_005", "status": "PASSED"},
+      {"test_id": "TC_006", "status": "FAILED", "error": "Expected 0 but got -5"}
+    ]
+  },
+  {
+    "run_id": "BUILD_104",
+    "results": [
+      {"test_id": "TC_001", "status": "PASSED"},
+      {"test_id": "TC_005", "status": "FAILED", "error": "Network Spikes"},
+      {"test_id": "TC_006", "status": "FAILED", "error": "Expected 0 but got -5"}
+    ]
+  },
+  {
+    "run_id": "BUILD_105",
+    "results": [
+      {"test_id": "TC_001", "status": "PASSED"},
+      {"test_id": "TC_005", "status": "PASSED"},
+      {"test_id": "TC_006", "status": "FAILED", "error": "Expected 0 but got -5"}
+    ]
+  }
+]

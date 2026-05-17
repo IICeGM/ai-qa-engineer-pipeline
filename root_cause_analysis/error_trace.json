@@ -1,0 +1,9 @@
+[
+  {
+    "test_id": "TC_006",
+    "scenario": "กรณีราคาสินค้าน้อยกว่ามูลค่าส่วนลดรวม (Edge Case)",
+    "expected": { "isError": false, "outputValue": 0 },
+    "actual": { "isError": false, "value": -5 },
+    "error_message": "Assertion Failed: คาดหวังค่า 0 แต่ได้รับค่า -5"
+  }
+]

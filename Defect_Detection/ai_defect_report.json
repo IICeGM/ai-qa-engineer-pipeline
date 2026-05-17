@@ -1,0 +1,19 @@
+{
+  "analysis_summary": "ระบบมีความเสถียรปานกลาง โดยมี Test Case ที่เสถียร 1 ตัว, Test Case ที่ Flaky 1 ตัว และ Test Case ที่เป็นจุดบกพร่องถาวร 1 ตัว ซึ่งบ่งชี้ถึงปัญหาเชิงตรรกะที่ต้องแก้ไขเร่งด่วน",
+  "stable_tests": [
+    "TC_001"
+  ],
+  "flaky_tests": [
+    {
+      "test_id": "TC_005",
+      "suspected_cause": "Test นี้ผ่านบ้างตกบ้าง โดยมี Error Message ที่บ่งชี้ถึงปัญหาด้านสภาพแวดล้อม เช่น 'Timeout connecting to DB' และ 'Network Spikes' ซึ่งมักเกิดจากความไม่เสถียรของเครือข่ายหรือฐานข้อมูล"
+    }
+  ],
+  "defect_hotspots": [
+    {
+      "test_id": "TC_006",
+      "error_pattern": "Expected 0 but got -5",
+      "urgency": "High"
+    }
+  ]
+}
