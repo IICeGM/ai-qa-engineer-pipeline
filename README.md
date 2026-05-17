@@ -1,80 +1,73 @@
-AI QA Engineer Pipeline
-โปรเจกต์นี้คือสถาปัตยกรรมการทดสอบซอฟต์แวร์อัตโนมัติ (Automated Testing Pipeline) ที่ผสานการทำงานของ Google Gemini API เข้ามาทำหน้าที่เป็น AI QA Engineer แบบครบวงจร ตั้งแต่การคิดแผนทดสอบ, รันเทส, วิเคราะห์บั๊ก, เสนอโค้ดแก้ไข ไปจนถึงการให้ Feedback เพื่อพัฒนาระบบในระยะยาว
+# AI QA Engineer Pipeline
 
- โครงสร้างการทำงานและไฟล์ที่เกี่ยวข้อง (File Flow)
-ระบบนี้ถูกออกแบบให้ทำงานต่อเนื่องกันเป็น Pipeline โดยผลลัพธ์ (Output) ของ Step หนึ่ง จะถูกส่งต่อไปเป็นข้อมูลตั้งต้น (Input) ให้กับ Step ถัดไป
+ระบบ Pipeline ทดสอบซอฟต์แวร์อัจฉริยะยุคใหม่ (Next-Gen Testing Ecosystem) ที่ขับเคลื่อนด้วย Google Gemini API โดยระบบจะทำหน้าที่แทน QA และ Developer ตั้งแต่การอ่านโค้ดเพื่อสร้างแผนทดสอบอัตโนมัติ รันเทส ดักจับบั๊กถาวร แยกแยะเทสไม่เสถียร (Flaky Tests) ตลอดจนการวิเคราะห์หาต้นตอความผิดพลาดและเสนอโค้ดแก้ไข (Auto-Patch) ครบจบใน 5 ขั้นตอนแบบ Full-Loop Feedback
 
-ไฟล์ต้นน้ำ (เป้าหมายหลัก): checkout.js (ซอร์สโค้ดฟังก์ชันที่ต้องการทดสอบ)
+---
 
- Step 1: Test Plan Generation (การสร้างแผนทดสอบ)
-สคริปต์ทำงาน: generate-test-plan.js
+## ฟีเจอร์เด่นของระบบ (Key Features)
 
-สิ่งที่ทำ: AI อ่านโค้ดเป้าหมาย (checkout.js) แล้ววิเคราะห์หา Happy Path, Negative Test และ Edge Case
+* **Smarter Testing:** ไม่ต้องเขียน Test Cases เอง AI วิเคราะห์ซอร์สโค้ดแล้วคิดให้ทั้งหมด ทั้ง Happy Path, Negative และ Edge Cases
+* **Faster Delivery:** ออกแบบการรันเทสแบบ Dynamic และส่งข้อมูล Log ต่อเนื่องกันเป็นทอดๆ โดยอัตโนมัติ
+* **Higher Reliability:** มีสมองกลคอยคัดกรอง Flaky Tests ประเมินความแข็งแรงของระบบ (System Health Score) และแนะนำแนวทางการ Refactor โค้ดให้ Clean ยิ่งขึ้น
 
-ไฟล์ที่สร้าง (Output): test_cases.json
+---
 
-ความเกี่ยวข้อง: เป็นจุดเริ่มต้นของระบบ ไฟล์แผนทดสอบนี้จะถูกส่งไปให้ Step 2 เพื่อใช้เป็นคำสั่งในการรันเทสจริง
+## โครงสร้างโปรเจกต์ (Project Structure)
 
- Step 2: Intelligent Execution (การรันเทสอัตโนมัติ)
-สคริปต์ทำงาน: intelligent-runner.js
+```text
+├── checkout.js                 # [เป้าหมาย] โค้ดฟังก์ชันระบบ E-commerce ตัวตั้งต้นที่ต้องการทดสอบ
+├── test_history_log.json       # ไฟล์จำลองประวัติการรันเทสย้อนหลัง (ใช้ใน Step 3)
+│
+├── generate-test-plan.js       # Step 1: สคริปต์สั่ง AI วิเคราะห์โค้ดและสร้างแผนทดสอบ
+├── test_cases.json             # [Output Step 1] แผนการทดสอบในรูปแบบ Structured JSON
+│
+├── intelligent-runner.js       # Step 2: สคริปต์ Test Runner รันเทสจริงกับโค้ดเป้าหมาย
+├── error_trace.json            # [Output Step 2] บันทึกหลักฐาน Error กรณีมีเทสไม่ผ่าน
+│
+├── ai-defect-detector.js       # Step 3: สคริปต์ AI แยกแยะ Flaky Test และ Defect Hotspot
+├── ai_defect_report.json       # [Output Step 3] รายงานสรุปสถานะความเสถียรของระบบ
+│
+├── ai-root-cause-analyzer.js   # Step 4: สคริปต์ AI ชี้เป้าบรรทัดที่บั๊กและเสนอทางแก้
+├── ai_suggested_fix.json       # [Output Step 4] แพตช์โค้ดคำแนะนำการซ่อมแซมจาก AI
+│
+├── continuous-feedback.js      # Step 5: สคริปต์ AI สรุปภาพรวมและประเมิน Health Score
+└── continuous_feedback_report.json # [Output Step 5] แผนกลยุทธ์การยกระดับคุณภาพซอฟต์แวร์
+เจาะลึก 5 ขั้นตอนการทำงาน (The 5-Step Pipeline)ขั้นตอนชื่อสคริปต์หน้าที่หลักสิ่งที่ได้ออกมา (Output)Step 1generate-test-plan.jsอ่านโค้ด checkout.js แล้วใช้ AI เจนเคสทดสอบตามเงื่อนไขtest_cases.jsonStep 2intelligent-runner.jsนำเคสทดสอบมารันจริง หากผลลัพธ์ไม่ตรงกับที่คิดจะคาย Error Logerror_trace.jsonStep 3ai-defect-detector.jsอ่านประวัติการรันย้อนหลังเพื่อหาจุดเสี่ยงและแยกเทสไม่เสถียรออกai_defect_report.jsonStep 4ai-root-cause-analyzer.jsนำโค้ดจริงกับ Error Log มาเทียบกันเพื่อหาบรรทัดที่พังและเขียนโค้ดแก้ai_suggested_fix.jsonStep 5continuous-feedback.jsรวบรวม Big Data ทั้งหมดมาให้คะแนนระบบและแนะวิธีเขียนโค้ดให้ดีขึ้นcontinuous_feedback_report.jsonวิธีการติดตั้งและตั้งค่า (Installation & Setup)ดาวน์โหลดโปรเจกต์ และเปิด Terminal ในโฟลเดอร์หลักติดตั้ง Dependencies ที่จำเป็น (รองรับ Node.js เวอร์ชันล่าสุด)Bashnpm install @google/genai
+ตั้งค่า API Key เปิดไฟล์สคริปต์ที่มีการใช้งาน AI (generate-test-plan.js, ai-defect-detector.js, ai-root-cause-analyzer.js, continuous-feedback.js) แล้วทำการระบุ Gemini API Key ของคุณในตัวแปร:JavaScriptconst apiKey = "ใส่_API_KEY_ของคุณที่นี่";
+(หมายเหตุ: หากต้องการรันเพื่อดู Flow ข้อมูลก่อน สามารถใช้โหมด Simulated หรือแบบ Mock ข้อมูลได้โดยไม่จำเป็นต้องใส่ API Key)วิธีการสั่งรันระบบ (How to Run)รันเรียงลำดับตามขั้นตอนทีละสเตป เพื่อให้เกิดการส่งต่อข้อมูลอย่างสมบูรณ์:Bash# 1. สร้างแผนการทดสอบด้วย AI
+node generate-test-plan.js
 
-สิ่งที่ทำ: โหลดข้อมูลจาก test_cases.json แล้วยิง Input เข้าไปในฟังก์ชัน checkout.js จริงๆ เพื่อเปรียบเทียบผลลัพธ์ (Expected vs Actual)
+# 2. รันการทดสอบจริงกับซอร์สโค้ดเพื่อหาข้อผิดพลาด
+node intelligent-runner.js
 
-ไฟล์ที่สร้าง (Output): error_trace.json (จะถูกสร้างขึ้นมาก็ต่อเมื่อมี Test Case ไหนที่รันแล้วพังหรือมี Error)
+# 3. วิเคราะห์หา Flaky Test และจุดเสี่ยงจากประวัติการรัน
+node ai-defect-detector.js
 
-ความเกี่ยวข้อง: ทำหน้าที่เป็นตัวดักจับความผิดปกติ หากพบการพัง ไฟล์ Error นี้จะถูกส่งเป็นหลักฐานไปให้ Step 4 ทำการสืบสวนต่อ
+# 4. ให้ AI สืบสวนหาต้นตอบั๊กและพ่นโค้ดแก้ไขออกมา
+node ai-root-cause-analyzer.js
 
- Step 3: Defect Detection (การจำแนกประเภทข้อผิดพลาด)
-สคริปต์ทำงาน: ai-defect-detector.js
+# 5. สรุปคะแนนสุขภาพระบบและรับคำแนะนำเชิงกลยุทธ์
+node continuous-feedback.js
+ผังการไหลของข้อมูล (Data Flow)
 
-ไฟล์ข้อมูลจำลอง (Input): test_history_log.json (จำลองประวัติการรันเทสย้อนหลังหลายๆ รอบ)
-
-สิ่งที่ทำ: AI เข้ามาอ่าน Log เพื่อแยกแยะว่าเทสไหนพังเพราะสภาพแวดล้อม (Flaky Tests เช่น เน็ตหลุด) และเทสไหนพังเพราะบั๊กของระบบจริงๆ (Defect Hotspots)
-
-ไฟล์ที่สร้าง (Output): ai_defect_report.json
-
-ความเกี่ยวข้อง: ช่วยคัดกรองข้อมูล แจ้งเตือนสถานะความเสถียรของระบบ และส่งรายงานไปให้ Step 5 วิเคราะห์ภาพรวม
-
- Step 4: Root Cause Analysis (การวิเคราะห์หาสาเหตุและเสนอทางแก้)
-สคริปต์ทำงาน: ai-root-cause-analyzer.js
-
-สิ่งที่ทำ: AI สวมบทบาทเป็นนักสืบ นำ checkout.js (โค้ดจริง) มาเทียบกับ error_trace.json (หลักฐานการพังจาก Step 2) เพื่อชี้เป้าว่าโค้ดบรรทัดไหนผิด และเขียนโค้ดที่ถูกต้องมาให้
-
-ไฟล์ที่สร้าง (Output): ai_suggested_fix.json
-
-ความเกี่ยวข้อง: เป็นตัวช่วยลดเวลาในการ Debug ของฝั่ง Developer และส่งแพตช์แก้ไขไปให้ Step 5 สรุปผล
-
-Step 5: Continuous Feedback (การเรียนรู้และสรุปผลภาพรวม)
-สคริปต์ทำงาน: continuous-feedback.js
-
-สิ่งที่ทำ: AI สวมบทบาทเป็น QA Director ดึงข้อมูล Big Data จากทั้งโปรเจกต์ (test_cases.json, ai_defect_report.json, ai_suggested_fix.json) มารวมกัน
-
-ไฟล์ที่สร้าง (Output): continuous_feedback_report.json
-
-ความเกี่ยวข้อง: เป็นจุดสิ้นสุด (ปิด Loop) ของ Pipeline ระบบจะให้ Feedback ว่าควรลบเทสไหนที่ซ้ำซ้อน ควรเพิ่มเทสไหนที่ขาดหาย และควรปรับโครงสร้างโค้ดอย่างไรเพื่อไม่ให้เกิดบั๊กเดิมซ้ำอีก
-
-สรุป Data Flow Diagram (เส้นทางการไหลของข้อมูล)
-เพื่อความเข้าใจง่าย นี่คือแผนภาพสรุปว่าไฟล์ไหนส่งข้อมูลไปที่ไหน:
-
-Plaintext
-[checkout.js] ───────(อ่านโค้ด)────────> [Step 1] ──> สร้าง ──> test_cases.json
-                                                                    │
-                                                                    ▼
-[checkout.js] <──────(ทดสอบจริง)─────── [Step 2] <──อ่านข้อมูล──────┘
-                                          │
-                                          ▼ (ถ้าพัง)
-                                     error_trace.json
-                                          │
-                                          ▼
-[checkout.js] ───────(อ่านโค้ด)────────> [Step 4] <──อ้างอิง────────┘
-                                          │
-                                          ▼
-                                   ai_suggested_fix.json ────────┐
-                                                                 │
-[test_history.json] ──(วิเคราะห์ Log)──> [Step 3]                │
-                                          │                      │
-                                          ▼                      ▼
-                                 ai_defect_report.json ──────> [Step 5] <──อ้างอิง (test_cases.json)
-                                                                 │
-                                                                 ▼
-                                                  continuous_feedback_report.json
+[checkout.js] ───────(วิเคราะห์โค้ด)──────> [Step 1] ──> เจนไฟล์ ──> test_cases.json
+                                                                       │
+                                                                       ▼
+[checkout.js] <──────(ระดมยิงเทสจริง)───── [Step 2] <──อ่านข้อมูล───────┘
+                                             │
+                                             ▼ (ตรวจพบเคส FAILED)
+                                        error_trace.json
+                                             │
+                                             ▼
+[checkout.js] ───────(แกะรอยหาบั๊ก)──────> [Step 4] <──เทียบหลักฐาน─────┘
+                                             │
+                                             ▼
+                                     ai_suggested_fix.json ────────┐
+                                                                   │
+[test_history_log.json] ──(คัดแยก Flaky)──> [Step 3]                │
+                                             │                     │
+                                             ▼                     ▼
+                                    ai_defect_report.json ─────> [Step 5] <──อ้างอิง (test_cases.json)
+                                                                   │
+                                                                   ▼
+                                                    continuous_feedback_report.json (เสร็จสิ้นลูป)
